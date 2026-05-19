@@ -39,7 +39,7 @@ export default function CommunityWalletPage() {
         walletId: wallet.id,
         feature: "AI_SUMMARY",
         credits: 15,
-        idempotencyKey: `idem-ai-${Date.now()}`,
+        idempotencyKey: `idem-ai-${crypto.randomUUID()}`,
       });
       addToast("success", "AI Summary Generated", "Consumed 15 credits successfully.");
       void refetch();
