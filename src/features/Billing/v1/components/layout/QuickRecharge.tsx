@@ -21,7 +21,7 @@ export default function QuickRecharge() {
       await addFunds.mutateAsync({
         amountRupees: amt,
         paymentMethod: "upi",
-        idempotencyKey: `quick-${Date.now()}`
+        idempotencyKey: `quick-${crypto.randomUUID()}`
       });
       addToast("success", "Recharge Successful", `Added ${formatCredits(amt * 10)} credits.`);
     } catch (e) {
