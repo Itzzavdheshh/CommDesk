@@ -18,7 +18,7 @@ const COLORS = [
   "var(--cd-success)",
   "var(--cd-warning)",
   "var(--cd-danger)",
-  "#8b5cf6",
+  "var(--cd-violet)", // Or another appropriate CSS variable
 ];
 
 export default function UsageCharts() {
