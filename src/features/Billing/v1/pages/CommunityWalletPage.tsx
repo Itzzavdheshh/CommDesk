@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import WalletHeader from "../components/layout/WalletHeader";
 import WalletStatsGrid from "../components/layout/WalletStatsGrid";
 import WalletFiltersBar from "../components/layout/WalletFilters";
@@ -8,12 +7,14 @@ import TransactionCardList from "../components/table/TransactionCardList";
 import TeamUsageTable from "../components/table/TeamUsageTable";
 import AutoRechargePanel from "../components/layout/AutoRechargePanel";
 import LowBalanceModal from "../components/layout/LowBalanceModal";
+import AddFundsModal from "../components/layout/AddFundsModal";
 import EmptyState from "@/features/Tasks/v1/components/common/EmptyState";
 import { ToastContainer, useToast } from "@/features/Tasks/v1/components/common/ToastNotification";
 import { useWallet, useWalletTransactions, useConsumeCredits } from "../hooks/useWallet";
 import { useUsageSummary } from "../hooks/useUsageAnalytics";
 import { useBillingGate } from "../hooks/useBillingGate";
 import { DEFAULT_TRANSACTION_FILTERS } from "../constants/billing.constants";
+import { formatCredits } from "../utils/credits";
 import type { TransactionFilters } from "../Billing.types";
 
 export default function CommunityWalletPage() {
@@ -21,6 +22,7 @@ export default function CommunityWalletPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [filters, setFilters] = useState<TransactionFilters>(DEFAULT_TRANSACTION_FILTERS);
   const [lowBalanceDismissed, setLowBalanceDismissed] = useState(false);
+  const [isAddFundsOpen, setIsAddFundsOpen] = useState(false);
 
   const { data: wallet, isLoading, isError, refetch } = useWallet();
   const { data: summary } = useUsageSummary();
@@ -28,7 +30,6 @@ export default function CommunityWalletPage() {
   const { data: paginated, isLoading: txsLoading } = useWalletTransactions(filters);
   const billingGate = useBillingGate();
 
-  const navigate = useNavigate();
   const consumeCredits = useConsumeCredits();
   const [showAIFeatures, setShowAIFeatures] = useState(false);
 
@@ -76,7 +77,12 @@ export default function CommunityWalletPage() {
           "radial-gradient(circle at top right, var(--cd-primary-subtle), transparent 34rem), var(--cd-bg)",
       }}
     >
-      <WalletHeader wallet={wallet} activeTab={activeTab} onTabChange={setActiveTab} />
+      <WalletHeader
+        wallet={wallet}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onAddFunds={() => setIsAddFundsOpen(true)}
+      />
 
       <div className="flex-1 flex flex-col">
         {isError ? (
@@ -123,7 +129,7 @@ export default function CommunityWalletPage() {
                       </p>
                     </div>
                     <button
-                      onClick={() => navigate("/org/billing/add-funds")}
+                      onClick={() => setIsAddFundsOpen(true)}
                       className="cd-btn cd-btn-primary px-4 py-2.5 rounded-xl text-sm font-bold hover:-translate-y-0.5 transition-all"
                     >
                       Add Funds
@@ -265,6 +271,18 @@ export default function CommunityWalletPage() {
         availableCredits={billingGate.availableCredits}
         threshold={billingGate.threshold}
         onDismiss={() => setLowBalanceDismissed(true)}
+        onAddFunds={() => setIsAddFundsOpen(true)}
+      />
+
+      <AddFundsModal
+        isOpen={isAddFundsOpen}
+        onClose={() => setIsAddFundsOpen(false)}
+        onSuccess={(credits) => {
+          addToast("success", "Payment successful", `${formatCredits(credits)} credits added.`);
+          void refetch();
+          void allTxQuery.refetch();
+        }}
+        onError={(message) => addToast("error", "Payment failed", message)}
       />
 
       <ToastContainer toasts={toasts} onDismiss={dismiss} />

@@ -8,6 +8,7 @@ interface Props {
   wallet: WalletType | undefined;
   activeTab: string;
   onTabChange: (tab: string) => void;
+  onAddFunds: () => void;
 }
 
 const TABS = [
@@ -16,7 +17,7 @@ const TABS = [
   { key: "team", label: "Team Usage", icon: Users },
 ];
 
-export default function WalletHeader({ wallet, activeTab, onTabChange }: Props) {
+export default function WalletHeader({ wallet, activeTab, onTabChange, onAddFunds }: Props) {
   const navigate = useNavigate();
 
   return (
@@ -52,7 +53,7 @@ export default function WalletHeader({ wallet, activeTab, onTabChange }: Props) 
               Usage
             </button>
             <button
-              onClick={() => navigate("/org/billing/add-funds")}
+              onClick={onAddFunds}
               className="cd-btn cd-btn-primary h-10 rounded-lg px-4 text-sm font-semibold shadow-none transition-all hover:-translate-y-0.5"
             >
               <Plus size={15} strokeWidth={2.5} />

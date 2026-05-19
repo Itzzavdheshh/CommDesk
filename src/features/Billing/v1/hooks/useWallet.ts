@@ -6,7 +6,6 @@ import type {
   ConsumeCreditsPayload,
   TransactionFilters,
   PaginatedTransactions,
-  CreditTransaction,
 } from "../Billing.types";
 import { BillingService } from "../services/billingService";
 import { validateMinAddFunds, applyTransactionFilters } from "../utils/credits";

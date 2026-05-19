@@ -8,9 +8,10 @@ interface Props {
   availableCredits: number;
   threshold: number;
   onDismiss: () => void;
+  onAddFunds?: () => void;
 }
 
-export default function LowBalanceModal({ isOpen, availableCredits, threshold, onDismiss }: Props) {
+export default function LowBalanceModal({ isOpen, availableCredits, threshold, onDismiss, onAddFunds }: Props) {
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -71,7 +72,11 @@ export default function LowBalanceModal({ isOpen, availableCredits, threshold, o
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={() => {
-              navigate("/org/billing/add-funds");
+              if (onAddFunds) {
+                onAddFunds();
+              } else {
+                navigate("/org/billing/add-funds");
+              }
               onDismiss();
             }}
             data-testid="low-balance-add-funds"

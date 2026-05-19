@@ -7,8 +7,6 @@ import {
   MdSettings,
   MdWork,
   MdWebhook,
-  MdAccountBalanceWallet,
-  MdBarChart,
   MdPayments,
 } from "react-icons/md";
 import { useTheme } from "@/theme";
