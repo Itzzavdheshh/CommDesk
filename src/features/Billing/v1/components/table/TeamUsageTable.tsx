@@ -1,6 +1,41 @@
+import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useTeamUsage } from "../../hooks/useUsageAnalytics";
 import { formatCredits } from "../../utils/credits";
+
+function UserAvatar({ src, name }: { src?: string; name: string }) {
+  const [imageError, setImageError] = useState(false);
+
+  const initials = name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (src && !imageError) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        className="w-8 h-8 rounded-full object-cover border"
+        style={{ borderColor: "var(--cd-border-subtle)" }}
+        onError={() => setImageError(true)}
+      />
+    );
+  }
+
+  return (
+    <div
+      className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs text-white select-none"
+      style={{
+        backgroundColor: "var(--cd-primary)",
+      }}
+    >
+      {initials}
+    </div>
+  );
+}
 
 export default function TeamUsageTable() {
   const { data: rows = [], isLoading } = useTeamUsage();
@@ -38,33 +73,7 @@ export default function TeamUsageTable() {
             >
               <td className="px-5 py-3 font-medium flex items-center gap-3" style={{ color: "var(--cd-text)" }}>
                 <div className="relative shrink-0 w-8 h-8">
-                  {row.memberAvatar ? (
-                    <img
-                      src={row.memberAvatar}
-                      alt={row.memberName}
-                      className="w-8 h-8 rounded-full object-cover border"
-                      style={{ borderColor: "var(--cd-border-subtle)" }}
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        const sibling = e.currentTarget.nextElementSibling as HTMLElement;
-                        if (sibling) sibling.style.display = 'flex';
-                      }}
-                    />
-                  ) : null}
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs text-white select-none"
-                    style={{
-                      backgroundColor: "var(--cd-primary)",
-                      display: row.memberAvatar ? 'none' : 'flex'
-                    }}
-                  >
-                    {row.memberName
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()
-                      .slice(0, 2)}
-                  </div>
+                  <UserAvatar src={row.memberAvatar} name={row.memberName} />
                 </div>
                 <div>
                   <div className="font-semibold text-sm" style={{ color: "var(--cd-text)" }}>

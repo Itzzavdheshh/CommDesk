@@ -6,7 +6,7 @@ import {
   PLATFORM_FEE_RATE,
   RECHARGE_PACKS,
 } from "../constants/billing.constants";
-import type { AddFundsPreview } from "../Billing.types";
+import type { AddFundsPreview, CreditTransaction, TransactionFilters } from "../Billing.types";
 
 export function rupeesToBaseCredits(rupees: number): number {
   return Math.floor(rupees * CREDITS_PER_RUPEE);
@@ -69,3 +69,22 @@ export function isLowBalance(availableCredits: number, threshold: number): boole
 export function canAfford(availableCredits: number, cost: number): boolean {
   return availableCredits >= cost && cost > 0;
 }
+
+export function applyTransactionFilters(
+  txs: CreditTransaction[],
+  filters: TransactionFilters,
+): CreditTransaction[] {
+  return txs.filter((t) => {
+    if (filters.type !== "all" && t.transactionType !== filters.type) return false;
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      const match =
+        t.source.toLowerCase().includes(q) ||
+        t.transactionType.toLowerCase().includes(q) ||
+        (t.sourceId?.toLowerCase().includes(q) ?? false);
+      if (!match) return false;
+    }
+    return true;
+  });
+}
+

@@ -9,25 +9,7 @@ import type {
   CreditTransaction,
 } from "../Billing.types";
 import { BillingService } from "../services/billingService";
-import { validateMinAddFunds } from "../utils/credits";
-
-function applyTransactionFilters(
-  txs: CreditTransaction[],
-  filters: TransactionFilters,
-): CreditTransaction[] {
-  return txs.filter((t) => {
-    if (filters.type !== "all" && t.transactionType !== filters.type) return false;
-    if (filters.search) {
-      const q = filters.search.toLowerCase();
-      const match =
-        t.source.toLowerCase().includes(q) ||
-        t.transactionType.toLowerCase().includes(q) ||
-        (t.sourceId?.toLowerCase().includes(q) ?? false);
-      if (!match) return false;
-    }
-    return true;
-  });
-}
+import { validateMinAddFunds, applyTransactionFilters } from "../utils/credits";
 
 export function useWallet() {
   return useQuery({
