@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  BadgeCheck,
   Banknote,
   CheckCircle2,
   CreditCard,
@@ -11,7 +10,7 @@ import {
   Wallet,
   X,
 } from "lucide-react";
-import { MIN_ADD_RUPEES, RECHARGE_PACKS } from "../../constants/billing.constants";
+import { MIN_ADD_RUPEES } from "../../constants/billing.constants";
 import { useAddFunds } from "../../hooks/useWallet";
 import { buildAddFundsPreview, formatCredits, formatRupees, validateMinAddFunds } from "../../utils/credits";
 import type { AddFundsPayload, PaymentState } from "../../Billing.types";
@@ -130,36 +129,8 @@ export default function AddFundsModal({ isOpen, onClose, onSuccess, onError }: P
               </div>
 
               <section className="mt-6">
-                <SectionTitle title="Credit calculator" />
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {RECHARGE_PACKS.slice(0, 4).map((pack) => {
-                    const isSelected = amount === pack.amountRupees;
-                    return (
-                      <button
-                        type="button"
-                        key={pack.id}
-                        onClick={() => setAmountStr(pack.amountRupees.toString())}
-                        className="min-h-24 rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5"
-                        style={{
-                          backgroundColor: isSelected ? "var(--cd-primary-subtle)" : "var(--cd-bg)",
-                          borderColor: isSelected ? "var(--cd-primary)" : "var(--cd-border-subtle)",
-                          color: isSelected ? "var(--cd-primary-text)" : "var(--cd-text)",
-                        }}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold">{pack.label}</span>
-                          {isSelected ? <BadgeCheck size={16} /> : null}
-                        </div>
-                        <span className="mt-3 block text-lg font-black">{formatRupees(pack.amountRupees)}</span>
-                        <span className="mt-1 block text-xs font-semibold">
-                          {formatCredits(pack.baseCredits + pack.bonusCredits)} cr
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <label className="mt-4 block text-sm font-bold" style={{ color: "var(--cd-text)" }}>
+                <SectionTitle title="Custom amount" />
+                <label className="block text-sm font-bold" style={{ color: "var(--cd-text)" }}>
                   Custom amount (Rs., min {MIN_ADD_RUPEES})
                 </label>
                 <div className="relative mt-2">
@@ -188,6 +159,21 @@ export default function AddFundsModal({ isOpen, onClose, onSuccess, onError }: P
                     {validation.error}
                   </p>
                 )}
+              </section>
+
+              <section className="mt-6">
+                <SectionTitle title="Credit calculator" />
+                <div
+                  className="grid gap-3 rounded-xl border p-4 sm:grid-cols-3"
+                  style={{ backgroundColor: "var(--cd-bg)", borderColor: "var(--cd-border-subtle)" }}
+                >
+                  <GeneratedCreditTile label="Base credits" value={formatCredits(preview.baseCredits)} />
+                  <GeneratedCreditTile
+                    label="Bonus credits"
+                    value={preview.bonusCredits > 0 ? `+${formatCredits(preview.bonusCredits)}` : "0"}
+                  />
+                  <GeneratedCreditTile label="Total credits" value={formatCredits(preview.totalCredits)} accent />
+                </div>
               </section>
 
               <section className="mt-6">
@@ -288,6 +274,33 @@ function SectionTitle({ title }: { title: string }) {
     <h3 className="mb-3 text-sm font-black uppercase tracking-wide" style={{ color: "var(--cd-text)" }}>
       {title}
     </h3>
+  );
+}
+
+function GeneratedCreditTile({
+  label,
+  value,
+  accent = false,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div
+      className="min-h-24 rounded-xl border p-4"
+      style={{
+        backgroundColor: accent ? "var(--cd-primary-subtle)" : "var(--cd-surface)",
+        borderColor: accent ? "var(--cd-primary)" : "var(--cd-border-subtle)",
+      }}
+    >
+      <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--cd-text-muted)" }}>
+        {label}
+      </span>
+      <span className="mt-3 block text-2xl font-black" style={{ color: accent ? "var(--cd-primary)" : "var(--cd-text)" }}>
+        {value}
+      </span>
+    </div>
   );
 }
 

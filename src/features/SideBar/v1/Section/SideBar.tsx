@@ -1,4 +1,5 @@
 import { RiContactsBookFill } from "react-icons/ri";
+import { useEffect, useState } from "react";
 import {
   MdAssignment,
   MdDashboard,
@@ -21,6 +22,7 @@ import useOrganizationStore from "@/features/Auth/v1/Store/Organization.Store";
 const SideBar = () => {
   const user = useAuthStore((state) => state.user);
   const organization = useOrganizationStore((state) => state.organization);
+  const [profileImageFailed, setProfileImageFailed] = useState(false);
 
   console.log("User in SideBar:", user);
   console.log("Organization in SideBar:", organization);
@@ -28,6 +30,17 @@ const SideBar = () => {
 
   const communityName = organization?.CommunityName || "CommDesk";
   const userRole = user?.role || "Admin";
+  const profileImageUrl = organization?.LogoUrl || "/defaultProfile.png";
+  const initials = communityName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  useEffect(() => {
+    setProfileImageFailed(false);
+  }, [profileImageUrl]);
 
   return (
     <div
@@ -87,14 +100,21 @@ const SideBar = () => {
             className="mt-3 w-full rounded-xl p-3 flex items-center gap-3 cursor-pointer transition-colors duration-150"
             style={{ backgroundColor: theme.bg.surfaceSecondary }}
           >
-            <img
-              src={organization?.LogoUrl || "/defaultProfile.png"}
-              alt="Profile"
-              className="w-9 h-9 rounded-full object-cover shrink-0"
-              onError={(e) => {
-                e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(communityName)}&background=4f46e5&color=fff`;
-              }}
-            />
+            {profileImageFailed ? (
+              <div
+                className="w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-xs font-bold text-white"
+                style={{ backgroundColor: theme.primary.default }}
+              >
+                {initials || "CD"}
+              </div>
+            ) : (
+              <img
+                src={profileImageUrl}
+                alt="Profile"
+                className="w-9 h-9 rounded-full object-cover shrink-0"
+                onError={() => setProfileImageFailed(true)}
+              />
+            )}
             <div className="min-w-0 flex-1 flex flex-col justify-center gap-0.5">
               <p className="text-sm font-semibold truncate" style={{ color: theme.text.primary }}>
                 {communityName}

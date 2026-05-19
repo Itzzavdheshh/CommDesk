@@ -99,6 +99,38 @@ const CopyEmailButton = ({ email }: { email: string }) => {
   );
 };
 
+const TeamMemberAvatar = ({ member }: { member: TeamMember }) => {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  return (
+    <div className="relative shrink-0">
+      {imageFailed ? (
+        <div
+          className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white select-none"
+          style={{ backgroundColor: "var(--cd-primary)" }}
+        >
+          {getInitials(member.name)}
+        </div>
+      ) : (
+        <img
+          src={member.image}
+          alt={member.name}
+          className="w-9 h-9 rounded-full object-cover border"
+          style={{ borderColor: "var(--cd-border)" }}
+          onError={() => setImageFailed(true)}
+        />
+      )}
+      <span
+        className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2"
+        style={{
+          backgroundColor: STATUS_COLOR[member.status],
+          borderColor: "var(--cd-surface)",
+        }}
+      />
+    </div>
+  );
+};
+
 const InternalSupport_Table = () => {
   return (
     <div className="w-full h-fit overflow-x-auto">
@@ -116,32 +148,7 @@ const InternalSupport_Table = () => {
             <tr key={member.id}>
               <td>
                 <div className="flex items-center gap-3">
-                  <div className="relative shrink-0">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-9 h-9 rounded-full object-cover border"
-                      style={{ borderColor: "var(--cd-border)" }}
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        const sibling = e.currentTarget.nextElementSibling as HTMLElement;
-                        if (sibling) sibling.style.display = 'flex';
-                      }}
-                    />
-                    <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white select-none"
-                      style={{ backgroundColor: "var(--cd-primary)", display: 'none' }}
-                    >
-                      {getInitials(member.name)}
-                    </div>
-                    <span
-                      className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2"
-                      style={{
-                        backgroundColor: STATUS_COLOR[member.status],
-                        borderColor: "var(--cd-surface)",
-                      }}
-                    />
-                  </div>
+                  <TeamMemberAvatar member={member} />
                   <span className="font-medium text-sm" style={{ color: "var(--cd-text)" }}>
                     {member.name}
                   </span>

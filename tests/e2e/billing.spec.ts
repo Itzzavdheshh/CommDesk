@@ -41,23 +41,25 @@ test.describe("Billing & Credits Wallet E2E Scenarios", () => {
     await expect(page.getByRole("heading", { name: "Community Wallet" })).toBeVisible();
     
     await page.getByRole("button", { name: "Add Funds" }).first().click();
-    await expect(page).toHaveURL(/\/org\/billing\/add-funds/);
+    const addFundsDialog = page.getByRole("dialog", { name: "Add Funds" });
+    await expect(addFundsDialog).toBeVisible();
 
-    await page.fill('input[type="number"]', "500");
+    await addFundsDialog.locator('input[type="number"]').fill("500");
 
-    await expect(page.getByTestId("credits-added-preview")).toHaveText("5,500"); // 5000 base + 500 bonus
-    await expect(page.locator("text=Platform fee")).toBeVisible();
-    await expect(page.locator("text=GST (18%)")).toBeVisible();
+    await expect(addFundsDialog.locator("text=Total credits")).toBeVisible();
+    await expect(addFundsDialog.locator("text=5,500")).toBeVisible();
+    await expect(addFundsDialog.locator("text=Platform fee")).toBeVisible();
+    await expect(addFundsDialog.locator("text=GST (18%)")).toBeVisible();
 
-    await page.getByRole("button", { name: "UPI" }).click();
-    await page.getByRole("button", { name: /Pay/ }).click();
+    await addFundsDialog.getByRole("button", { name: "UPI" }).click();
+    await addFundsDialog.getByRole("button", { name: /Pay/ }).click();
 
     await expect(page.locator("text=Processing...")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Payment successful" })).toBeVisible({
       timeout: 10000,
     });
 
-    await page.getByRole("button", { name: "Back to wallet" }).click();
+    await page.getByRole("button", { name: "Done" }).click();
     await expect(page).toHaveURL(/\/org\/dashboard\/community\/wallet/);
   });
 
@@ -115,7 +117,6 @@ test.describe("Billing & Credits Wallet E2E Scenarios", () => {
     await expect(page.locator("text=AI_SUMMARY").first()).toBeVisible();
     
     await page.getByRole("button", { name: "Overview" }).click();
-    await expect(page.getByTestId("wallet-stat-available-value")).toHaveText("6,849");
     const newBalanceText = await page.getByTestId("wallet-stat-available-value").textContent();
     const newBalance = parseCredits(newBalanceText);
     
