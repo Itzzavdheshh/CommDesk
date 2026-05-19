@@ -39,24 +39,26 @@ export default function WalletStatsGrid({ wallet, burnRatePerDay = 52 }: Props) 
   ];
 
   return (
-    <div
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 rounded-2xl border divide-y sm:divide-y-0 sm:divide-x overflow-hidden shadow-sm transition-shadow hover:shadow-md"
-      style={{
-        backgroundColor: "var(--cd-surface)",
-        borderColor: "var(--cd-border)",
-      }}
-    >
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
         <div
           key={stat.label}
           data-testid={testIdFor(stat.label)}
-          className="p-6 flex flex-col gap-1 transition-colors hover:bg-[var(--cd-hover)]"
+          className="group rounded-2xl border p-5 transition-all hover:-translate-y-1 hover:shadow-lg"
+          style={{
+            backgroundColor: "var(--cd-surface)",
+            borderColor: "var(--cd-border-subtle)",
+          }}
         >
-          <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--cd-text-muted)] opacity-60">
-            {stat.label}
-          </span>
-          <div className="flex items-center gap-2">
-            <stat.icon size={16} style={{ color: stat.color }} />
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--cd-text-muted)] opacity-70">
+              {stat.label}
+            </span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ backgroundColor: "var(--cd-bg)" }}>
+              <stat.icon size={16} style={{ color: stat.color }} />
+            </span>
+          </div>
+          <div className="flex items-end gap-2">
             <span
               data-testid={`${testIdFor(stat.label)}-value`}
               className="text-2xl font-black tracking-tight"
@@ -64,6 +66,7 @@ export default function WalletStatsGrid({ wallet, burnRatePerDay = 52 }: Props) 
             >
               {stat.val}
             </span>
+            <span className="mb-1 text-xs font-semibold" style={{ color: "var(--cd-text-muted)" }}>credits</span>
           </div>
         </div>
       ))}

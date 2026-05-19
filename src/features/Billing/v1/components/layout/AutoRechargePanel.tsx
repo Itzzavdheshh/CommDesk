@@ -30,28 +30,42 @@ export default function AutoRechargePanel({ wallet, onSuccess }: Props) {
       style={{
         backgroundColor: "var(--cd-surface)",
         borderColor: "var(--cd-border-subtle)",
+        boxShadow: "0 14px 34px var(--cd-shadow)",
       }}
     >
-      <div className="flex items-center gap-2 mb-4">
-        <RefreshCw size={18} style={{ color: "var(--cd-primary)" }} />
-        <h3 className="font-semibold" style={{ color: "var(--cd-text)" }}>
-          Auto Recharge
-        </h3>
+      <div className="flex items-start justify-between gap-4 mb-5">
+        <div>
+          <div className="flex items-center gap-2">
+            <RefreshCw size={18} style={{ color: "var(--cd-primary)" }} />
+            <h3 className="font-black" style={{ color: "var(--cd-text)" }}>
+              Auto Recharge
+            </h3>
+          </div>
+          <p className="mt-1 text-sm" style={{ color: "var(--cd-text-muted)" }}>
+            Keep premium workflows running when credits run low.
+          </p>
+        </div>
       </div>
 
-      <label className="flex items-center gap-3 mb-4 cursor-pointer">
+      <label
+        className="flex items-center justify-between gap-3 rounded-xl border p-4 mb-4 cursor-pointer"
+        style={{
+          backgroundColor: enabled ? "var(--cd-primary-subtle)" : "var(--cd-bg)",
+          borderColor: enabled ? "var(--cd-primary)" : "var(--cd-border-subtle)",
+        }}
+      >
+        <span className="text-sm font-semibold" style={{ color: "var(--cd-text)" }}>
+          Automatically recharge when balance drops below threshold
+        </span>
         <input
           type="checkbox"
           checked={enabled}
           onChange={(e) => setEnabled(e.target.checked)}
           className="w-4 h-4 rounded accent-[var(--cd-primary)]"
         />
-        <span className="text-sm" style={{ color: "var(--cd-text)" }}>
-          Automatically recharge when balance drops below threshold
-        </span>
       </label>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
         <div>
           <label className="text-xs font-medium mb-1 block" style={{ color: "var(--cd-text-muted)" }}>
             Threshold (credits)
@@ -62,13 +76,13 @@ export default function AutoRechargePanel({ wallet, onSuccess }: Props) {
             value={threshold}
             onChange={(e) => setThreshold(Number(e.target.value))}
             disabled={!enabled}
-            className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent"
+            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
             style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
           />
         </div>
         <div>
           <label className="text-xs font-medium mb-1 block" style={{ color: "var(--cd-text-muted)" }}>
-            Recharge amount ({"₹"}, min {MIN_ADD_RUPEES})
+            Recharge amount (Rs., min {MIN_ADD_RUPEES})
           </label>
           <input
             type="number"
@@ -76,7 +90,7 @@ export default function AutoRechargePanel({ wallet, onSuccess }: Props) {
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}
             disabled={!enabled}
-            className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent"
+            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
             style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
           />
         </div>
@@ -85,7 +99,7 @@ export default function AutoRechargePanel({ wallet, onSuccess }: Props) {
       <button
         onClick={() => void handleSave()}
         disabled={autoRecharge.isPending}
-        className="cd-btn cd-btn-primary px-4 py-2 rounded-lg text-sm disabled:opacity-50"
+        className="cd-btn cd-btn-primary px-4 py-2.5 rounded-xl text-sm font-bold disabled:opacity-50"
       >
         {autoRecharge.isPending ? "Saving..." : "Save Settings"}
       </button>

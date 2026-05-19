@@ -69,7 +69,13 @@ export default function CommunityWalletPage() {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col" style={{ backgroundColor: "var(--cd-bg)" }}>
+    <div
+      className="w-full min-h-screen flex flex-col"
+      style={{
+        background:
+          "radial-gradient(circle at top right, var(--cd-primary-subtle), transparent 34rem), var(--cd-bg)",
+      }}
+    >
       <WalletHeader wallet={wallet} activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="flex-1 flex flex-col">
@@ -104,14 +110,25 @@ export default function CommunityWalletPage() {
                   style={{
                     backgroundColor: "var(--cd-surface)",
                     borderColor: "var(--cd-border-subtle)",
+                    boxShadow: "0 14px 34px var(--cd-shadow)",
                   }}
                 >
-                  <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--cd-text)" }}>
-                    Feature Usage
-                  </h3>
-                  <p className="text-xs mb-4" style={{ color: "var(--cd-text-muted)" }}>
-                    Run credit-metered features through the centralized billing engine.
-                  </p>
+                  <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h3 className="text-lg font-black" style={{ color: "var(--cd-text)" }}>
+                        Feature Usage
+                      </h3>
+                      <p className="text-sm mt-1" style={{ color: "var(--cd-text-muted)" }}>
+                        Run credit-metered features through the centralized billing engine.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => navigate("/org/billing/add-funds")}
+                      className="cd-btn cd-btn-primary px-4 py-2.5 rounded-xl text-sm font-bold hover:-translate-y-0.5 transition-all"
+                    >
+                      Add Funds
+                    </button>
+                  </div>
 
                   <div className="flex flex-col gap-3">
                     <div className="flex flex-wrap gap-3">
@@ -125,12 +142,6 @@ export default function CommunityWalletPage() {
                         }}
                       >
                         AI Features
-                      </button>
-                      <button
-                        onClick={() => navigate("/org/billing/add-funds")}
-                        className="cd-btn cd-btn-primary px-4 py-2.5 rounded-xl text-sm font-semibold hover:scale-[1.02] transition-all"
-                      >
-                        Add Funds
                       </button>
                     </div>
 
