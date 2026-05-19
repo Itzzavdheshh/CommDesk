@@ -40,7 +40,7 @@ export default function AddFundsPage() {
       await addFunds.mutateAsync({
         amountRupees: amount,
         paymentMethod,
-        idempotencyKey: `pay-${Date.now()}${forceFail ? "-fail" : ""}`,
+        idempotencyKey: `pay-${crypto.randomUUID()}${forceFail ? "-fail" : ""}`,
       });
       setPaymentState("success");
       addToast("success", "Payment successful", `${formatCredits(preview.totalCredits)} credits added.`);
