@@ -8,6 +8,7 @@ type TeamMember = {
   role: string;
   email: string;
   status: "active" | "away" | "offline";
+  image: string;
 };
 
 const MEMBERS: TeamMember[] = [
@@ -18,6 +19,7 @@ const MEMBERS: TeamMember[] = [
     role: "System Admin",
     email: "john.doe@example.com",
     status: "active",
+    image: "https://randomuser.me/api/portraits/men/1.jpg",
   },
   {
     id: 2,
@@ -26,6 +28,7 @@ const MEMBERS: TeamMember[] = [
     role: "HR Manager",
     email: "jane.smith@example.com",
     status: "active",
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
   },
   {
     id: 3,
@@ -34,6 +37,7 @@ const MEMBERS: TeamMember[] = [
     role: "Finance Lead",
     email: "alex.turner@example.com",
     status: "away",
+    image: "https://randomuser.me/api/portraits/men/3.jpg",
   },
   {
     id: 4,
@@ -42,6 +46,7 @@ const MEMBERS: TeamMember[] = [
     role: "UI/UX Designer",
     email: "maria.garcia@example.com",
     status: "active",
+    image: "https://randomuser.me/api/portraits/women/4.jpg",
   },
   {
     id: 5,
@@ -50,6 +55,7 @@ const MEMBERS: TeamMember[] = [
     role: "Infrastructure",
     email: "chris.wilson@example.com",
     status: "offline",
+    image: "https://randomuser.me/api/portraits/men/5.jpg",
   },
 ];
 
@@ -111,9 +117,20 @@ const InternalSupport_Table = () => {
               <td>
                 <div className="flex items-center gap-3">
                   <div className="relative shrink-0">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-9 h-9 rounded-full object-cover border"
+                      style={{ borderColor: "var(--cd-border)" }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const sibling = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (sibling) sibling.style.display = 'flex';
+                      }}
+                    />
                     <div
                       className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white select-none"
-                      style={{ backgroundColor: "var(--cd-primary)" }}
+                      style={{ backgroundColor: "var(--cd-primary)", display: 'none' }}
                     >
                       {getInitials(member.name)}
                     </div>

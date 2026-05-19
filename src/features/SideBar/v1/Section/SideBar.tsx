@@ -7,6 +7,9 @@ import {
   MdSettings,
   MdWork,
   MdWebhook,
+  MdAccountBalanceWallet,
+  MdBarChart,
+  MdPayments,
 } from "react-icons/md";
 import { useTheme } from "@/theme";
 import { ThemeToggle } from "@/Component/ui/ThemeToggle";
@@ -24,6 +27,9 @@ const SideBar = () => {
   console.log("User in SideBar:", user);
   console.log("Organization in SideBar:", organization);
   const { theme } = useTheme();
+
+  const communityName = organization?.CommunityName || "CommDesk";
+  const userRole = user?.role || "Admin";
 
   return (
     <div
@@ -66,6 +72,7 @@ const SideBar = () => {
         <SideBarLink icon={<MdEvent />} text="Events" link="/org/events" />
         <SideBarLink icon={<MdAssignment />} text="Tasks" link="/org/tasks" />
         <SideBarLink icon={<MdWebhook />} text="Webhooks" link="/org/dashboard/webhooks" />
+        <SideBarLink icon={<MdPayments />} text="Payments" link="/org/billing" />
         <SideBarLink icon={<RiContactsBookFill />} text="Contact Submissions" link="/org/contact" />
 
         {/* Footer */}
@@ -86,13 +93,16 @@ const SideBar = () => {
               src={organization?.LogoUrl || "/defaultProfile.png"}
               alt="Profile"
               className="w-9 h-9 rounded-full object-cover shrink-0"
+              onError={(e) => {
+                e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(communityName)}&background=4f46e5&color=fff`;
+              }}
             />
             <div className="min-w-0 flex-1 flex flex-col justify-center gap-0.5">
               <p className="text-sm font-semibold truncate" style={{ color: theme.text.primary }}>
-                {organization?.CommunityName}
+                {communityName}
               </p>
               <p className="text-xs truncate font-medium" style={{ color: theme.primary.default }}>
-                {user?.role}
+                {userRole}
               </p>
             </div>
           </div>

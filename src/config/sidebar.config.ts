@@ -52,6 +52,16 @@ export const sidebarItems = [
     path: "/org/billing",
     icon: CreditCard,
   },
+  {
+    title: "Wallet",
+    path: "/org/billing/wallet",
+    icon: CreditCard,
+  },
+  {
+    title: "Usage",
+    path: "/org/billing/usage",
+    icon: BarChart3,
+  },
 
   {
     title: "Settings",
