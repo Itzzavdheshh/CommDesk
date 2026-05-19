@@ -13,7 +13,7 @@ export function useBillingGate() {
         isExhausted: false,
         canUsePremium: true,
         availableCredits: 0,
-        threshold: 200,
+        threshold: DEFAULT_LOW_BALANCE_THRESHOLD,
       };
     }
 
