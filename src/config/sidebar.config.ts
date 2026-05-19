@@ -55,7 +55,7 @@ export const sidebarItems = [
   {
     title: "Wallet",
     path: "/org/billing/wallet",
-    icon: CreditCard,
+    icon: Wallet,
   },
   {
     title: "Usage",
