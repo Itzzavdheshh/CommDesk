@@ -90,6 +90,8 @@ const OrgRoute = () => {
           {/* Add Member */}
           <Route path="add-member" element={<AddMemberPage />} />
         </Route>
+        {/* Fallback route to suppress "No routes matched location" warning on non-org paths */}
+        <Route path="*" element={null} />
       </Routes>
     </Suspense>
   );
