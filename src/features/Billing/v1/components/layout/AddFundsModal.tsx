@@ -14,6 +14,7 @@ import { MIN_ADD_RUPEES } from "../../constants/billing.constants";
 import { useAddFunds } from "../../hooks/useWallet";
 import { buildAddFundsPreview, formatCredits, formatRupees, validateMinAddFunds } from "../../utils/credits";
 import type { AddFundsPayload, PaymentState } from "../../Billing.types";
+import Input from "@/Component/ui/Input";
 
 const PAYMENT_METHODS: Array<{
   id: AddFundsPayload["paymentMethod"];
@@ -130,35 +131,20 @@ export default function AddFundsModal({ isOpen, onClose, onSuccess, onError }: P
 
               <section className="mt-6">
                 <SectionTitle title="Custom amount" />
-                <label className="block text-sm font-bold" style={{ color: "var(--cd-text)" }}>
-                  Custom amount (Rs., min {MIN_ADD_RUPEES})
-                </label>
-                <div className="relative mt-2">
-                  <Banknote
-                    size={18}
-                    className="absolute left-4 top-1/2 -translate-y-1/2"
-                    style={{ color: "var(--cd-text-muted)" }}
-                  />
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    min={MIN_ADD_RUPEES}
-                    step={50}
-                    value={amountStr}
-                    onChange={(event) => {
-                      const digitsOnly = event.target.value.replace(/\D/g, "");
-                      setAmountStr(digitsOnly.replace(/^0+(?=\d)/, ""));
-                    }}
-                    className="w-full rounded-xl border bg-transparent py-3 pl-11 pr-4 text-lg font-bold outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-                    style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-                  />
-                </div>
-                {!validation.valid && (
-                  <p className="mt-2 text-xs font-semibold" style={{ color: "var(--cd-danger)" }}>
-                    {validation.error}
-                  </p>
-                )}
+                <Input
+                  label={`Custom amount (Rs., min ${MIN_ADD_RUPEES})`}
+                  name="amount"
+                  type="number"
+                  value={amountStr}
+                  onChange={(_, val) => {
+                    const digitsOnly = val.replace(/\D/g, "");
+                    setAmountStr(digitsOnly.replace(/^0+(?=\d)/, ""));
+                  }}
+                  leftIcon={<Banknote size={18} />}
+                  error={validation.valid ? undefined : validation.error ?? undefined}
+                  className="w-full !mb-0"
+                  inputClassName="!text-lg !font-bold"
+                />
               </section>
 
               <section className="mt-6">

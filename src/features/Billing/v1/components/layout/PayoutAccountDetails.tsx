@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CheckCircle2, Landmark, Save } from "lucide-react";
 import { useToast } from "@/features/Tasks/v1/components/common/ToastNotification";
+import Input from "@/Component/ui/Input";
 
 export default function PayoutAccountDetails() {
   const { addToast } = useToast();
@@ -47,51 +48,43 @@ export default function PayoutAccountDetails() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        <div>
-          <label className="text-xs font-semibold mb-1 block" style={{ color: "var(--cd-text-muted)" }}>Account Holder Name</label>
-          <input
-            type="text"
-            value={form.accountHolder}
-            onChange={(e) => setForm({ ...form, accountHolder: e.target.value })}
-            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-            style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-            placeholder="John Doe"
-          />
-        </div>
-        <div>
-          <label className="text-xs font-semibold mb-1 block" style={{ color: "var(--cd-text-muted)" }}>Bank Name</label>
-          <input
-            type="text"
-            value={form.bankName}
-            onChange={(e) => setForm({ ...form, bankName: e.target.value })}
-            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-            style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-            placeholder="HDFC Bank"
-          />
-        </div>
-        <div>
-          <label className="text-xs font-semibold mb-1 block" style={{ color: "var(--cd-text-muted)" }}>Account Number</label>
-          <input
-            type="password"
-            value={form.accountNumber}
-            onChange={(e) => setForm({ ...form, accountNumber: e.target.value })}
-            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-            style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-            placeholder="********4567"
-          />
-        </div>
-        <div>
-          <label className="text-xs font-semibold mb-1 block" style={{ color: "var(--cd-text-muted)" }}>IFSC / Swift Code</label>
-          <input
-            type="text"
-            value={form.ifsc}
-            onChange={(e) => setForm({ ...form, ifsc: e.target.value.toUpperCase() })}
-            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-            style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-            placeholder="HDFC0001234"
-          />
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 mb-2">
+        <Input
+          label="Account Holder Name"
+          name="accountHolder"
+          type="text"
+          value={form.accountHolder}
+          onChange={(_, val) => setForm({ ...form, accountHolder: val })}
+          placeholder="John Doe"
+          className="w-full"
+        />
+        <Input
+          label="Bank Name"
+          name="bankName"
+          type="text"
+          value={form.bankName}
+          onChange={(_, val) => setForm({ ...form, bankName: val })}
+          placeholder="HDFC Bank"
+          className="w-full"
+        />
+        <Input
+          label="Account Number"
+          name="accountNumber"
+          type="password"
+          value={form.accountNumber}
+          onChange={(_, val) => setForm({ ...form, accountNumber: val })}
+          placeholder="********4567"
+          className="w-full"
+        />
+        <Input
+          label="IFSC / Swift Code"
+          name="ifsc"
+          type="text"
+          value={form.ifsc}
+          onChange={(_, val) => setForm({ ...form, ifsc: val.toUpperCase() })}
+          placeholder="HDFC0001234"
+          className="w-full"
+        />
       </div>
 
       <div className="flex justify-end">

@@ -1,5 +1,6 @@
 import { Search, X } from "lucide-react";
 import type { CreditTransactionType, TransactionFilters } from "../../Billing.types";
+import Input from "@/Component/ui/Input";
 
 interface Props {
   filters: TransactionFilters;
@@ -27,28 +28,21 @@ export default function WalletFiltersBar({ filters, onChange, filteredCount, tot
       }}
     >
       <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center gap-3">
-        <div
-          className="flex flex-1 min-w-[200px] items-center gap-2 rounded-lg border px-3 py-2"
-          style={{
-            backgroundColor: "var(--cd-surface)",
-            borderColor: "var(--cd-border-subtle)",
-          }}
-        >
-          <Search size={16} style={{ color: "var(--cd-text-muted)" }} />
-          <input
-            type="text"
-            placeholder="Search transactions..."
-            value={filters.search}
-            onChange={(e) => onChange({ ...filters, search: e.target.value, page: 1 })}
-            className="flex-1 bg-transparent text-sm outline-none"
-            style={{ color: "var(--cd-text)" }}
-          />
-          {filters.search && (
-            <button onClick={() => onChange({ ...filters, search: "", page: 1 })}>
-              <X size={14} style={{ color: "var(--cd-text-muted)" }} />
-            </button>
-          )}
-        </div>
+        <Input
+          name="search"
+          placeholder="Search transactions..."
+          value={filters.search}
+          onChange={(_, val) => onChange({ ...filters, search: val, page: 1 })}
+          leftIcon={<Search size={16} />}
+          rightIcon={
+            filters.search ? (
+              <button type="button" onClick={() => onChange({ ...filters, search: "", page: 1 })}>
+                <X size={14} />
+              </button>
+            ) : undefined
+          }
+          className="flex-1 min-w-[200px] !mb-0"
+        />
 
         <div className="flex flex-wrap gap-2">
           {TYPE_OPTIONS.map((opt) => {

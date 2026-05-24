@@ -17,6 +17,7 @@ import { buildAddFundsPreview, formatCredits, formatRupees, validateMinAddFunds 
 import { useAddFunds } from "../hooks/useWallet";
 import { ToastContainer, useToast } from "@/features/Tasks/v1/components/common/ToastNotification";
 import type { PaymentState } from "../Billing.types";
+import Input from "@/Component/ui/Input";
 
 const PAYMENT_METHODS = [
   { id: "upi", label: "UPI", icon: Smartphone },
@@ -154,36 +155,21 @@ export default function AddFundsPage() {
                 className="rounded-2xl border p-5"
                 style={{ backgroundColor: "var(--cd-surface)", borderColor: "var(--cd-border-subtle)" }}
               >
-                <label className="text-sm font-bold mb-2 block" style={{ color: "var(--cd-text)" }}>
-                  Custom amount (Rs., min {MIN_ADD_RUPEES})
-                </label>
-                <div className="relative">
-                  <Banknote
-                    size={18}
-                    className="absolute left-4 top-1/2 -translate-y-1/2"
-                    style={{ color: "var(--cd-text-muted)" }}
-                  />
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    min={MIN_ADD_RUPEES}
-                    step={50}
-                    value={amountStr}
-                    onChange={(e) => {
-                      const digitsOnly = e.target.value.replace(/\D/g, "");
-                      const val = digitsOnly.replace(/^0+(?=\d)/, "");
-                      setAmountStr(val);
-                    }}
-                    className="w-full rounded-xl border py-3 pl-11 pr-4 text-lg font-bold bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-                    style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-                  />
-                </div>
-                {!validation.valid && (
-                  <p className="text-xs mt-2" style={{ color: "var(--cd-danger)" }}>
-                    {validation.error}
-                  </p>
-                )}
+                <Input
+                  label={`Custom amount (Rs., min ${MIN_ADD_RUPEES})`}
+                  name="amount"
+                  type="number"
+                  value={amountStr}
+                  onChange={(_, val) => {
+                    const digitsOnly = val.replace(/\D/g, "");
+                    const cleanVal = digitsOnly.replace(/^0+(?=\d)/, "");
+                    setAmountStr(cleanVal);
+                  }}
+                  leftIcon={<Banknote size={18} />}
+                  error={validation.valid ? undefined : validation.error ?? undefined}
+                  className="w-full !mb-0"
+                  inputClassName="!text-lg !font-bold"
+                />
               </section>
 
               <section>

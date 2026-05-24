@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RefreshCw } from "lucide-react";
 import type { Wallet } from "../../Billing.types";
+import Input from "@/Component/ui/Input";
 import { useAutoRecharge } from "../../hooks/useWallet";
 import { MIN_ADD_RUPEES } from "../../constants/billing.constants";
 
@@ -66,34 +67,24 @@ export default function AutoRechargePanel({ wallet, onSuccess }: Props) {
       </label>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-        <div>
-          <label className="text-xs font-medium mb-1 block" style={{ color: "var(--cd-text-muted)" }}>
-            Threshold (credits)
-          </label>
-          <input
-            type="number"
-            min={0}
-            value={threshold}
-            onChange={(e) => setThreshold(Number(e.target.value))}
-            disabled={!enabled}
-            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-            style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-          />
-        </div>
-        <div>
-          <label className="text-xs font-medium mb-1 block" style={{ color: "var(--cd-text-muted)" }}>
-            Recharge amount (Rs., min {MIN_ADD_RUPEES})
-          </label>
-          <input
-            type="number"
-            min={MIN_ADD_RUPEES}
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            disabled={!enabled}
-            className="w-full rounded-xl border px-3 py-2.5 text-sm bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-            style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-          />
-        </div>
+        <Input
+          label="Threshold (credits)"
+          name="threshold"
+          type="number"
+          value={threshold}
+          onChange={(_, val) => setThreshold(Number(val) || 0)}
+          disabled={!enabled}
+          className="w-full !mb-0"
+        />
+        <Input
+          label={`Recharge amount (Rs., min ${MIN_ADD_RUPEES})`}
+          name="amount"
+          type="number"
+          value={amount}
+          onChange={(_, val) => setAmount(Number(val) || 0)}
+          disabled={!enabled}
+          className="w-full !mb-0"
+        />
       </div>
 
       <button

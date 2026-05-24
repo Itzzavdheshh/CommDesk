@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CreditCard, Loader2, Zap } from "lucide-react";
+import Input from "@/Component/ui/Input";
 import { formatRupees, buildAddFundsPreview, formatCredits } from "../../utils/credits";
 import { useAddFunds } from "../../hooks/useWallet";
 import { useToast } from "@/features/Tasks/v1/components/common/ToastNotification";
@@ -71,22 +72,19 @@ export default function QuickRecharge() {
         })}
       </div>
 
-      <div className="mb-5">
-        <label className="text-xs font-semibold mb-1 block" style={{ color: "var(--cd-text-muted)" }}>Custom Amount (Rs.)</label>
-        <input
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          value={amountStr}
-          onChange={(e) => {
-            const digitsOnly = e.target.value.replace(/\D/g, "");
-            const val = digitsOnly.replace(/^0+(?=\d)/, "");
-            setAmountStr(val);
-          }}
-          className="w-full rounded-xl border px-3 py-2.5 text-sm font-semibold bg-transparent outline-none focus:ring-4 focus:ring-[var(--cd-primary-subtle)]"
-          style={{ borderColor: "var(--cd-border-subtle)", color: "var(--cd-text)" }}
-        />
-      </div>
+      <Input
+        label="Custom Amount (Rs.)"
+        name="amount"
+        type="text"
+        value={amountStr}
+        onChange={(_, val) => {
+          const digitsOnly = val.replace(/\D/g, "");
+          const cleanVal = digitsOnly.replace(/^0+(?=\d)/, "");
+          setAmountStr(cleanVal);
+        }}
+        className="w-full !mb-5"
+        inputClassName="font-semibold"
+      />
 
       <div
         className="mb-5 rounded-xl border p-4"
