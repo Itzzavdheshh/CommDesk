@@ -14,7 +14,7 @@ const LoginPage = () => {
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const validateFields = (email: string, password: string): boolean => {
+  const validateFields = useCallback((email: string, password: string): boolean => {
     const errors: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
@@ -29,7 +29,7 @@ const LoginPage = () => {
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
-  };
+  }, []);
 
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
