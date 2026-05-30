@@ -72,7 +72,7 @@ const LoginPage = () => {
         setServerError(message);
       }
     },
-    [loginMutation, navigate],
+    [loginMutation, navigate, validateFields],
   );
 
   return (
