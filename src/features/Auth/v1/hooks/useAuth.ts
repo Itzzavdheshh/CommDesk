@@ -58,11 +58,12 @@ const useLoginMutation = () => {
 
     onSuccess: async (response) => {
       const user = response.data;
+      const token = response.token;
 
       console.log("Login successful:", user);
 
       // Save auth first
-      useAuthStore.getState().setAuthData(user);
+      useAuthStore.getState().setAuthData(user, token);
 
       // Fetch organization if needed
       if (user.role === "organization") {
