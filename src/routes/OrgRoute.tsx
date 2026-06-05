@@ -58,9 +58,7 @@ const OrgRoute = () => {
           <Route
             path="dashboard/webhooks/*"
             element={
-              <ProtectedRoute
-                allowedRoles={["CommunityOwner", "Admin", "Organizer"]}
-              >
+              <ProtectedRoute allowedRoles={["CommunityOwner", "Admin", "Organizer"]}>
                 <Routes>
                   <Route index element={<WebhookListPage />} />
                   <Route path="create" element={<CreateWebhookPage />} />

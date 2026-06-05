@@ -51,7 +51,9 @@ const LoginPage = () => {
           password,
         });
 
-        const Role = response.data.role;
+        console.log("Login successful: come from login page --->", response);
+
+        const Role = response.data.FindUser.role;
 
         if (Role === "organization") {
           navigate("/org/dashboard");
