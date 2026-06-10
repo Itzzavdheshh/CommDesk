@@ -33,7 +33,6 @@ export const MemberValidationSchema = z.object({
   skills: z.array(z.string()).optional(),
   areaOfInterest: z.array(z.string()).min(1, "Area of interest is required"),
   internalNotes: z.string().optional(),
-
 });
 
 export type MemberFormValues = z.input<typeof MemberValidationSchema>;

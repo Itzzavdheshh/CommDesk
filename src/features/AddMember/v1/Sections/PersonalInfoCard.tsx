@@ -7,9 +7,9 @@ import { useFormContext } from "react-hook-form";
 import type { MemberFormValues } from "../Validator/AddMember.Validator";
 
 const PersonalInfoCard = () => {
-  const { setValue, watch , formState } = useFormContext<MemberFormValues>();
+  const { setValue, watch, formState } = useFormContext<MemberFormValues>();
 
-  const {errors} = formState;
+  const { errors } = formState;
 
   const firstName = watch("firstName") ?? "";
   const lastName = watch("lastName") ?? "";
@@ -59,9 +59,6 @@ const PersonalInfoCard = () => {
 
       <div className="flex flex-col mt-[3.5vh]">
         <div className="flex gap-[2.5vw]">
-
-        
-
           <Input
             label="First Name"
             error={errors.firstName?.message}
@@ -71,7 +68,7 @@ const PersonalInfoCard = () => {
             value={firstName}
             onChange={(_, value) => setValue("firstName", value, { shouldDirty: true })}
           />
-         
+
           <Input
             label="Last Name"
             name="lastName"
