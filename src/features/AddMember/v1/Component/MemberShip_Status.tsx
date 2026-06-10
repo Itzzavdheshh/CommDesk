@@ -14,8 +14,8 @@ const MemberShip_Status = () => {
     "On Boarding": "bg-blue-400",
   };
 
-  const { watch, setValue , formState} = useFormContext<MemberFormValues>();
-  const {errors} = formState
+  const { watch, setValue, formState } = useFormContext<MemberFormValues>();
+  const { errors } = formState;
   const membershipStatus = (watch("membershipStatus") ?? "On Boarding") as MembershipStatus;
 
   return (
@@ -47,7 +47,6 @@ const MemberShip_Status = () => {
           type="radio"
           id="Inactive"
           name="membershipStatus"
-          
           value="Inactive"
           checked={membershipStatus === "Inactive"}
           onChange={() => setValue("membershipStatus", "Inactive", { shouldDirty: true })}
