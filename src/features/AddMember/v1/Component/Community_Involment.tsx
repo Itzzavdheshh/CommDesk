@@ -7,9 +7,9 @@ import { useFormContext } from "react-hook-form";
 import type { MemberFormValues } from "../Validator/AddMember.Validator";
 
 const Community_Involvement = () => {
-  const { watch, setValue , formState} = useFormContext<MemberFormValues>();
+  const { watch, setValue, formState } = useFormContext<MemberFormValues>();
 
-  const {errors} = formState
+  const { errors } = formState;
 
   const [internalNotes, setInternalNotes] = useState(watch("internalNotes") ?? "");
   const areaOfInterest = watch("areaOfInterest") ?? [];
@@ -48,7 +48,6 @@ const Community_Involvement = () => {
             <InterestBox
               key={index}
               label={interest}
-              
               isChecked={areaOfInterest.includes(interest)}
               onClick={(clicked) => toggleInterest(interest, clicked)}
             />

@@ -118,11 +118,7 @@ const DropDown: React.FC<DropDownProps> = ({
         </div>
       )}
 
-      {error && (
-        <p className="text-xs mt-1  text-[var(--cd-danger)]">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-xs mt-1  text-[var(--cd-danger)]">{error}</p>}
     </div>
   );
 };

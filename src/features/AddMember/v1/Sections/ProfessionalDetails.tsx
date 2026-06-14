@@ -8,9 +8,9 @@ import type { MemberFormValues } from "../Validator/AddMember.Validator";
 import { theme } from "@/theme";
 
 const ProfessionalDetails = () => {
-  const { watch, setValue  , formState} = useFormContext<MemberFormValues>();
+  const { watch, setValue, formState } = useFormContext<MemberFormValues>();
 
-  const {errors} = formState
+  const { errors } = formState;
 
   const [skillInput, setSkillInput] = React.useState("");
   const location = watch("location") ?? "";
