@@ -36,6 +36,7 @@ const SendMailPage = () => {
 
   // Fetch candidate, job, & logs
   const { data: applicant } = useApplicantDetail(applicantId);
+  const { data: applicant } = useApplicantDetail(applicantId);
   const { data: job } = useJobDetail(jobId);
   const { data: mailLogs = [] } = useMailLogs(applicantId);
   const sendMailMutation = useSendMail();
