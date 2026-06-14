@@ -22,8 +22,8 @@ const Url: React.FC<UrlProps> = ({
   style,
   ariaLabel = "URL display",
 }) => {
-  const valid = isValidDomain(domain);
-  const [Domain, setDomain] = React.useState(domain);
+  const valid = isValidDomain(domain || "");
+  const [Domain, setDomain] = React.useState(domain || "");
 
   return (
     <div className={className} style={style} aria-label={ariaLabel} role="presentation">
