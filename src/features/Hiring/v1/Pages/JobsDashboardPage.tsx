@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTheme } from "@/theme";
 import { useNavigate } from "react-router-dom";
 import { useJobs, useCreateJob, useDeleteJob, useUpdateJob } from "../Hooks/useHiring";
@@ -18,18 +18,39 @@ const JobsDashboardPage = () => {
   const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
 
   // Fetch jobs
-  const { data: jobs = [], isLoading } = useJobs({
-    search,
-    status: activeTab === "all" ? undefined : activeTab,
-  });
+  const { data: allJobs = [], isLoading } = useJobs();
 
   const createJobMutation = useCreateJob();
   const updateJobMutation = useUpdateJob();
   const deleteJobMutation = useDeleteJob();
 
+  // Filter in memory
+  const jobs = useMemo(() => {
+    return allJobs.filter((job) => {
+      if (search) {
+        const q = search.toLowerCase();
+        const matchTitle = job.title.toLowerCase().includes(q);
+        const matchDept = job.department.toLowerCase().includes(q);
+        const matchManager = job.hiringManager.toLowerCase().includes(q);
+        const matchId = job.id.toLowerCase().includes(q);
+        if (!matchTitle && !matchDept && !matchManager && !matchId) return false;
+      }
+
+      if (activeTab && activeTab !== "all") {
+        if (job.status.toLowerCase() !== activeTab.toLowerCase()) return false;
+      }
+
+      if (selectedDept && selectedDept !== "all") {
+        if (job.department.toLowerCase() !== selectedDept.toLowerCase()) return false;
+      }
+
+      return true;
+    });
+  }, [allJobs, search, activeTab, selectedDept]);
+
   // Metrics
-  const activeOpenings = jobs.filter((j) => j.status === "active").length;
-  const totalApplicants = jobs.reduce((sum, j) => sum + j.applicantsCount, 0);
+  const activeOpenings = allJobs.filter((j) => j.status === "active").length;
+  const totalApplicants = allJobs.reduce((sum, j) => sum + j.applicantsCount, 0);
 
   // Departments list for filtering
   const departments = ["all", "Product", "Engineering", "Sales", "HR"];
@@ -353,9 +374,7 @@ const JobsDashboardPage = () => {
                     </td>
                   </tr>
                 ) : (
-                  jobs
-                    .filter((job) => selectedDept === "all" || job.department.toLowerCase() === selectedDept.toLowerCase())
-                    .map((job) => {
+                  jobs.map((job) => {
                       const status = getStatusColor(job.status);
                       const isSelected = selectedJobs.includes(job.id);
                       return (

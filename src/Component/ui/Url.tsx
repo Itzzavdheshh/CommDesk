@@ -23,7 +23,7 @@ const Url: React.FC<UrlProps> = ({
   ariaLabel = "URL display",
 }) => {
   const valid = isValidDomain(domain || "");
-  const [Domain, setDomain] = React.useState(domain || "");
+  const [domainState, setDomainState] = React.useState(domain || "");
 
   return (
     <div className={className} style={style} aria-label={ariaLabel} role="presentation">
@@ -39,8 +39,8 @@ const Url: React.FC<UrlProps> = ({
       </div>
       <input
         type="text"
-        value={Domain}
-        onChange={(e) => setDomain(e.target.value)}
+        value={domainState}
+        onChange={(e) => setDomainState(e.target.value)}
         className="Domain p-2 rounded-r-lg border w-[80%]"
         style={{
           color: "var(--cd-text)",

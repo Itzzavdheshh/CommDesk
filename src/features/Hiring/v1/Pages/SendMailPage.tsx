@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
 import { useNavigate, useParams } from "react-router-dom";
-import { useApplicantDetail, useSendMail, useMailLogs } from "../Hooks/useHiring";
+import { useApplicantDetail, useSendMail, useMailLogs, useJobDetail } from "../Hooks/useHiring";
 import Button from "@/Component/ui/Button";
 import Input from "@/Component/ui/Input";
 import { FiArrowLeft, FiMail, FiSend, FiClock, FiFileText } from "react-icons/fi";
@@ -34,8 +34,9 @@ const SendMailPage = () => {
   const navigate = useNavigate();
   const { id: jobId, applicantId } = useParams<{ id: string; applicantId: string }>();
 
-  // Fetch candidate & logs
+  // Fetch candidate, job, & logs
   const { data: applicant } = useApplicantDetail(applicantId);
+  const { data: job } = useJobDetail(jobId);
   const { data: mailLogs = [] } = useMailLogs(applicantId);
   const sendMailMutation = useSendMail();
 
@@ -48,11 +49,11 @@ const SendMailPage = () => {
   const handleSelectTemplate = (temp: typeof templates[0]) => {
     if (!applicant) return;
     const resolvedSubject = temp.subject
-      .replace("[Position]", "Senior Product Designer")
-      .replace("[CandidateName]", applicant.name);
+      .replace(/\[Position\]/g, job?.title || "Position")
+      .replace(/\[CandidateName\]/g, applicant.name);
     const resolvedBody = temp.body
-      .replace("[Position]", "Senior Product Designer")
-      .replace("[CandidateName]", applicant.name);
+      .replace(/\[Position\]/g, job?.title || "Position")
+      .replace(/\[CandidateName\]/g, applicant.name);
 
     setSubject(resolvedSubject);
     setBody(resolvedBody);

@@ -183,9 +183,50 @@ const CreateJobPage = () => {
   };
 
   const handleSaveDraft = () => {
-    // Explicit save draft status
-    setJobStatus("draft");
-    alert("Role status changed to Draft. The wizard state is autosaved locally.");
+    const parsedSkills = skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const parsedTags = tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    const payload = {
+      title: title || "Untitled Job Opening",
+      department: department || "Engineering",
+      hiringManager: hiringManager || "Sarah Jenkins",
+      community: community || "Developer Communities",
+      slug: slug || `untitled-job-${Date.now()}`,
+      description: description || "No description provided yet.",
+      responsibilities: responsibilities.filter((r) => r.trim()),
+      requirements: requirements.filter((r) => r.trim()),
+      benefits: benefits.filter((b) => b.trim()),
+      skills: parsedSkills,
+      tags: parsedTags,
+      employmentType,
+      workplaceType,
+      salaryRange: salaryRange || "Not specified",
+      openings,
+      timeline,
+      expirationDate: expirationDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      visibility,
+      isFeatured,
+      isSponsored,
+      status: "draft" as JobStatus,
+    };
+
+    createJobMutation.mutate(payload, {
+      onSuccess: (newJob) => {
+        localStorage.removeItem("commdesk-create-job-draft");
+        alert(`Draft job opening '${newJob.title}' successfully saved to database!`);
+        navigate("/org/jobs");
+      },
+      onError: (err) => {
+        console.error("Failed to create draft job:", err);
+        alert("Failed to save draft. Check details and retry.");
+      },
+    });
   };
 
   const handlePublish = () => {

@@ -135,34 +135,14 @@ export function useDeleteJob() {
 // APPLICANTS HOOKS
 // ==========================================
 
-export function useApplicants(jobId: string | undefined, search?: string, status?: string) {
+export function useApplicants(jobId: string | undefined) {
   const applicants = useHiringStore((state) => state.applicants);
 
   return useQuery({
-    queryKey: ["hiring-applicants", jobId, search, status],
+    queryKey: ["hiring-applicants", jobId],
     queryFn: async () => {
       await delay(400);
-      let list = applicants.filter((a) => a.jobId === jobId);
-
-      if (search) {
-        const q = search.toLowerCase();
-        list = list.filter(
-          (a) =>
-            a.name.toLowerCase().includes(q) ||
-            a.email.toLowerCase().includes(q) ||
-            a.skills.some((s) => s.toLowerCase().includes(q))
-        );
-      }
-
-      if (status && status !== "all") {
-        if (status === "strong") {
-          list = list.filter((a) => a.matchScore >= 85);
-        } else {
-          list = list.filter((a) => a.status === status);
-        }
-      }
-
-      return list;
+      return applicants.filter((a) => a.jobId === jobId);
     },
     enabled: !!jobId,
   });

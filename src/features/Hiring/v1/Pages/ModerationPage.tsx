@@ -69,7 +69,7 @@ const ModerationPage = () => {
           <div className="flex flex-col gap-5">
             {moderationQueue.map((job) => {
               // Mock a fraud/scam score
-              const scamRisk = job.salaryRange.includes("commission") ? 35 : 5;
+              const scamRisk = job.salaryRange.toLowerCase().includes("commission") ? 35 : 5;
               const isHighRisk = scamRisk > 30;
 
               return (

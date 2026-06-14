@@ -29,8 +29,11 @@ const MediaManagementPage = () => {
     setDragActive(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      // Create a mock local object URL for the dropped file to simulate upload
       const file = e.dataTransfer.files[0];
+      if (file.size > 500 * 1024) {
+        alert("For LocalStorage storage preservation in this simulation, uploaded photos are limited to 500KB. Please upload a smaller image.");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = (event) => {
         if (event.target?.result && typeof event.target.result === "string") {
@@ -46,6 +49,10 @@ const MediaManagementPage = () => {
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (file.size > 500 * 1024) {
+        alert("For LocalStorage storage preservation in this simulation, uploaded photos are limited to 500KB. Please upload a smaller image.");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = (event) => {
         if (event.target?.result && typeof event.target.result === "string") {

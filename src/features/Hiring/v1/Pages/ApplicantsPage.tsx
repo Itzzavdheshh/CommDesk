@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTheme } from "@/theme";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApplicants, useJobDetail, useUpdateApplicantStatus } from "../Hooks/useHiring";
@@ -19,16 +19,40 @@ const ApplicantsPage = () => {
 
   // Fetch job & applicants
   const { data: job } = useJobDetail(jobId);
-  const { data: applicants = [], isLoading } = useApplicants(jobId, search, activeTab === "all" ? undefined : activeTab);
+  const { data: allJobApplicants = [], isLoading } = useApplicants(jobId);
   const updateStatusMutation = useUpdateApplicantStatus();
 
   // Metrics (dynamically computed from all applicants for this job)
-  const allJobApplicants = useApplicants(jobId).data || [];
   const totalCount = allJobApplicants.length;
   const screeningCount = allJobApplicants.filter((a) => a.status === "screening").length;
   const interviewCount = allJobApplicants.filter((a) => ["technical", "interview", "hr"].includes(a.status)).length;
   const offerCount = allJobApplicants.filter((a) => ["offer", "hired"].includes(a.status)).length;
   const rejectedCount = allJobApplicants.filter((a) => a.status === "rejected").length;
+
+  // Filter in memory
+  const applicants = useMemo(() => {
+    let list = [...allJobApplicants];
+
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter(
+        (a) =>
+          a.name.toLowerCase().includes(q) ||
+          a.email.toLowerCase().includes(q) ||
+          a.skills.some((s) => s.toLowerCase().includes(q))
+      );
+    }
+
+    if (activeTab && activeTab !== "all") {
+      if (activeTab === "strong") {
+        list = list.filter((a) => a.matchScore >= 85);
+      } else {
+        list = list.filter((a) => a.status === activeTab);
+      }
+    }
+
+    return list;
+  }, [allJobApplicants, search, activeTab]);
 
   const handleSelectApplicant = (id: string) => {
     setSelectedApplicants((prev) =>
