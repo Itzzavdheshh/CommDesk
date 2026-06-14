@@ -49,12 +49,13 @@ const SendMailPage = () => {
 
   const handleSelectTemplate = (temp: typeof templates[0]) => {
     if (!applicant) return;
+    const positionTitle = job?.title || "Position";
     const resolvedSubject = temp.subject
-      .replace(/\[Position\]/g, job?.title || "Position")
-      .replace(/\[CandidateName\]/g, applicant.name);
+      .replaceAll("[Position]", positionTitle)
+      .replaceAll("[CandidateName]", applicant.name);
     const resolvedBody = temp.body
-      .replace(/\[Position\]/g, job?.title || "Position")
-      .replace(/\[CandidateName\]/g, applicant.name);
+      .replaceAll("[Position]", positionTitle)
+      .replaceAll("[CandidateName]", applicant.name);
 
     setSubject(resolvedSubject);
     setBody(resolvedBody);
