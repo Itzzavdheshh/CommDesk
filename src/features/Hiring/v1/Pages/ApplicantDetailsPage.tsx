@@ -100,7 +100,7 @@ const ApplicantDetailsPage = () => {
                 </span>
               </div>
               <span className="text-xs" style={{ color: theme.text.muted }}>
-                Applied for Senior Product Designer &bull; Applied {applicant.appliedDate}
+                Applied for {job?.title || "Position"} &bull; Applied {applicant.appliedDate}
               </span>
             </div>
           </div>
