@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
 import { useNavigate, useParams } from "react-router-dom";
-import { useApplicantDetail, useUpdateApplicantStatus, useAddRecruiterNote } from "../Hooks/useHiring";
+import { useApplicantDetail, useUpdateApplicantStatus, useAddRecruiterNote, useJobDetail } from "../Hooks/useHiring";
 import { ApplicantStatus } from "../Types/Hiring.types";
 import Button from "@/Component/ui/Button";
 import { FiCalendar, FiMail, FiArrowLeft, FiPlus, FiChevronRight } from "react-icons/fi";
