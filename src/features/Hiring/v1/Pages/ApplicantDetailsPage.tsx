@@ -14,6 +14,7 @@ const ApplicantDetailsPage = () => {
 
   // Fetch applicant
   const { data: applicant, isLoading } = useApplicantDetail(applicantId);
+  const { data: job } = useJobDetail(jobId);
   const updateStatusMutation = useUpdateApplicantStatus();
   const addNoteMutation = useAddRecruiterNote();
 
